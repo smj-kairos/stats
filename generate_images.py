@@ -280,10 +280,6 @@ async def main() -> None:
             exclude_langs=excluded_langs,
             ignore_forked_repos=ignore_forked_repos,
         )
-        await s.get_stats()
-        await generate_languages(s)
-        await generate_overview(s)
-        await generate_kpis(s)
         await generate_contributions(s)
 
 

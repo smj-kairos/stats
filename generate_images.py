@@ -251,10 +251,9 @@ async def main() -> None:
     """
     Generate all badges
     """
-    access_token = os.getenv("ACCESS_TOKEN")
+    access_token = os.getenv("ACCESS_TOKEN") or os.getenv("GITHUB_TOKEN")
     if not access_token:
-        # access_token = os.getenv("GITHUB_TOKEN")
-        raise Exception("A personal access token is required to proceed!")
+        raise Exception("A GitHub access token is required to proceed!")
     user = os.getenv("GITHUB_ACTOR")
     if user is None:
         raise RuntimeError("Environment variable GITHUB_ACTOR must be set.")

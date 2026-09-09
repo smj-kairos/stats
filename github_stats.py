@@ -1,6 +1,7 @@
 #!/usr/bin/python3
 
 import asyncio
+import json
 import os
 from typing import Dict, List, Optional, Set, Tuple, Any, cast
 
@@ -38,6 +39,7 @@ class Queries(object):
         :param generated_query: string query to be sent to the API
         :return: decoded GraphQL JSON output
         """
+        generated_query = generated_query.replace("viewer {", "viewer: user(login: " + json.dumps(self.username) + ") {")
         headers = {
             "Authorization": f"Bearer {self.access_token}",
         }
@@ -50,6 +52,8 @@ class Queries(object):
                 )
             result = await r_async.json()
             if result is not None:
+                if result.get("errors"):
+                    raise RuntimeError("GitHub GraphQL query failed")
                 return result
         except:
             print("aiohttp failed for GraphQL query")
@@ -62,6 +66,8 @@ class Queries(object):
                 )
                 result = r_requests.json()
                 if result is not None:
+                    if result.get("errors"):
+                        raise RuntimeError("GitHub GraphQL query failed")
                     return result
         return dict()
 
